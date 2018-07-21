@@ -1,0 +1,6 @@
+#lang racket
+(require (planet neil/html-parsing:3:0))
+(require net/url)
+(define google (string->url "http://docs.google.com"))
+(define in (get-pure-port google))
+(close-input-port in)

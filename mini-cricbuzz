@@ -1,0 +1,211 @@
+#lang racket/gui
+(require racket/draw
+         net/url)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Classes definition;;;;;;;;;;;;;;;;;;;;;;;;
+(define info%
+ (class object%
+   (init-field team1name)
+   (init-field team2name)
+   (init-field venue)
+   (init-field overs)
+   (init-field battingteamname)
+   (init-field team1captain)
+   (init-field team1wk)
+   (init-field team1list)
+   (init-field team2captain)
+   (init-field team2wk)
+   (init-field team2list)
+   (define bowler-limit
+      (/ overs 5))
+
+   (super-new)
+
+   (define/public (get-overs) overs)
+   (define/public (get-bowler-limit) bowler-limit)
+   (define/public (bowlingteamname)
+     (some-one-else battingteamname))
+   (define (some-one-else x)
+     (if (equal? x team1name) team2name team1name))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;PARENT-WINDOW;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define frame (new frame% [label "Mini-Cricbuzz"]
+                   [width 500]
+                   [height 250]
+                   [border 10]
+                   [spacing 10]))
+(define lion (read-bitmap (get-pure-port (string->url "file:///home/nikhil/logo.bmp"))))
+(define small-lion (make-bitmap (/ (send lion get-width) 2)
+                                (/ (send lion get-height) 2)))
+(define dc (new bitmap-dc% [bitmap small-lion]))
+(send dc scale 1/2 1/2)
+(send dc set-alpha 1)
+(send dc draw-bitmap lion 0 0)
+(define fire (read-bitmap (get-pure-port (string->url "file:///home/nikhil/logo1.jpg"))))
+(define small-fire (make-bitmap (/ (send fire get-width) 2)
+                                (/ (send fire get-height) 2)))
+(define new-dc (new bitmap-dc% [bitmap small-fire]))
+(send new-dc scale 1/2 1/2)
+(send new-dc set-alpha 1)
+(send new-dc draw-bitmap fire 0 0)
+(define Main-logo (read-bitmap (get-pure-port (string->url "file:///home/nikhil/Pictures/Screenshot%20from%202018-04-19%2004-13-16.png"))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INTRO;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define dialog1 (instantiate dialog%
+                 ["Info"]))
+(define panel1 (new vertical-panel% [parent dialog1]))
+(define TeamA (new text-field% [parent panel1]
+     [label "Team A"]))
+(new message% [parent panel1] [label "vs"])
+(define TeamB (new text-field% [parent panel1]
+     [label "Team B"]))
+(define Venue (new text-field% [parent panel1]
+                   [label "Venue  "]))
+(define panel (new horizontal-panel% [parent panel1]
+                     [alignment '(center center)]))
+(new button%
+     [parent panel]
+     [label "Cancel"]
+     [callback (lambda (button event) (send dialog1 show #f))])
+(new button%
+     [parent panel]
+     [label "Ok"]
+     [callback (lambda (button event)
+                  (begin (send dialog1 show #f) 
+                         (define temp (send TeamA get-value))
+                         (define temp2 (send TeamB get-value))
+                         (define dialog2 (instantiate dialog% [(string-append "Playing XI - " (send Venue get-value))]))
+                         (define bat-first (send TeamA get-value))
+                         (define Toss (new radio-box% [label "Who will bat first"]
+                                           [parent dialog2]
+                                           [choices (list (send TeamA get-value) (send TeamB get-value))]
+                                           [callback (lambda (choose event) (set! bat-first (send TeamB get-value)))]))
+                         (define Nikhil (new horizontal-panel% [parent dialog2]))
+                         (define Nikhil2 (new vertical-panel% [parent Nikhil]))
+                         (define cap1 (new text-field% [parent Nikhil2]
+                              [label (string-append temp " Team Captian")]))
+                         (define wk1 (new text-field% [parent Nikhil2]
+                              [label (string-append temp " Team Wicket-Keeper")]))
+                         (define player1 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player2 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player3 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player4 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player5 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player6 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player7 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player8 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define player9 (new text-field% [parent Nikhil2]
+                              [label "Player"]))
+                         (define Nikhil3 (new vertical-panel% [parent Nikhil]))
+                         (define cap2 (new text-field% [parent Nikhil3]
+                              [label (string-append temp2 " Team Captian")]))
+                         (define wk2 (new text-field% [parent Nikhil3]
+                              [label (string-append temp2 " Team Wicket-Keeper")]))
+                         (define pla1 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla2 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla3 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla4 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla5 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla6 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla7 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla8 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define pla9 (new text-field% [parent Nikhil3]
+                              [label "Player"]))
+                         (define scrap (new horizontal-panel% [parent Nikhil3]
+                                            [alignment '(center center)]
+                                            [spacing 20]))
+                         (new button% [label "Cancel"]
+                              [parent scrap]
+                              [callback (lambda (button event) (send dialog2 show #f))])
+                         (new button% [label "Ok"]
+                              [parent scrap]
+                              [callback (lambda (button event) (begin (send dialog2 show #f)
+                                                                      (define info1 (make-object info% temp temp2 (send Venue get-value) 20 bat-first
+                                                                                      (send cap1 get-value)
+                                                                                      (send wk1 get-value)
+                                                                                      (list
+                                                                                       (send player1 get-value)
+                                                                                       (send player2 get-value)
+                                                                                       (send player3 get-value)
+                                                                                       (send player4 get-value)
+                                                                                       (send player5 get-value)
+                                                                                       (send player6 get-value)
+                                                                                       (send player7 get-value)
+                                                                                       (send player8 get-value)
+                                                                                       (send player9 get-value)
+                                                                                       )
+                                                                                      (send cap2 get-value)
+                                                                                      (send wk2 get-value)
+                                                                                      (list
+                                                                                       (send pla1 get-value)
+                                                                                       (send pla2 get-value)
+                                                                                       (send pla3 get-value)
+                                                                                       (send pla4 get-value)
+                                                                                       (send pla5 get-value)
+                                                                                       (send pla6 get-value)
+                                                                                       (send pla7 get-value)
+                                                                                       (send pla8 get-value)
+                                                                                       (send pla9 get-value)
+                                                                                       )))
+                                                                      (define Info-frame (new frame% [label "Match Info"]))
+                                                                      (define Info-panel (new vertical-panel% [parent Info-frame]))
+                                                                      (new message% [label (string-append "Match                " temp "vs" temp2)]
+                                                                           [parent Info-panel])
+                                                                      (new message% [label (string-append "Toss                 " bat-first "batting first")]
+                                                                           [parent Info-panel])
+                                                                      (define pavan (new horizontal-panel% [parent frame] [alignment '(left top)]))
+                                                                      (define logo1 (new panel% [parent pavan]))
+                                                                      (void (new message% [parent logo1] [label small-lion]))
+                                                                      (define main (new vertical-panel% [parent pavan]))
+                                                                      (define main-logo (new panel% [parent main]))
+                                                                      (new message% [parent main-logo] [label Main-logo])
+                                                                      (define buttons (new horizontal-panel% [parent main]
+                                                                                           [spacing 10]))
+                                                                      (new button% [label "Info"]
+                                                                           [parent buttons]
+                                                                           [callback (lambda (button event) (send Info-frame show #t))])
+                                                                      (new button% [label "First-Innings"]
+                                                                           [parent buttons])
+                                                                      (new button% [label "Second-Innings"]
+                                                                           [parent buttons])
+                                                                      (new button% [label "Commentary"]
+                                                                           [parent buttons])
+                                                                      (define score (new group-box-panel% [label (string-append bat-first " - Innings")]
+                                                                                         [parent main]))
+                                                                      (new message% [label (string-append "118-5" "(14.5)")]
+                                                                           [parent score])
+                                                                      (define logo2 (new panel% [parent pavan]))
+                                                                      (void (new message% [parent logo2] [label small-fire]))
+                                                                      
+                                                                      (send frame show #t)))])
+                         (send dialog2 show #t)))])
+(send dialog1 show #t)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
